@@ -1,29 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Retail Weekly Upload</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>Retail Inventory Upload</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="container py-4">
-  <h2 class="mb-4">Upload Weekly Sales CSV</h2>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container">
+    <a class="navbar-brand" href="#">🛒 Retail Forecasting</a>
+  </div>
+</nav>
+
+<div class="container">
+  <h2 class="mb-4">📤 Upload Weekly Sales CSV</h2>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       {% for cat, msg in messages %}
-        <div class="alert alert-{{cat}}">{{msg}}</div>
+        <div class="alert alert-{{ cat }} alert-dismissible fade show" role="alert">
+          {{ msg }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
       {% endfor %}
     {% endif %}
   {% endwith %}
 
-  <form method="POST" enctype="multipart/form-data">
-    <input type="file" name="file" class="form-control mb-3" required>
-    <button class="btn btn-primary">Upload</button>
+  <form method="POST" enctype="multipart/form-data" class="mb-5">
+    <div class="input-group">
+      <input type="file" name="file" class="form-control" required>
+      <button class="btn btn-primary" type="submit">Upload</button>
+    </div>
   </form>
 
-  <h4 class="mt-5">Recent Uploads</h4>
-  <ul class="list-group">
+  <h4>🕓 Recent Uploads</h4>
+  <ul class="list-group mb-4">
     {% for fname, ts in uploads %}
       <li class="list-group-item d-flex justify-content-between">
         <span>{{ fname }}</span>
@@ -33,14 +45,18 @@
       <li class="list-group-item text-muted">No uploads yet.</li>
     {% endfor %}
   </ul>
-  <!-- after the Recent Uploads list -->
-{% if latest_week and latest_week >= 2 %}
-<div class="mt-4">
-  <a href="{{ url_for('predict', week=latest_week) }}"
-     class="btn btn-success">
-    View Predictions for Week {{ latest_week }}
+
+  {% if latest_week and latest_week >= 2 %}
+  <a href="{{ url_for('predict', week=latest_week) }}" class="btn btn-success">
+    📈 View Predictions for Week {{ latest_week }}
   </a>
+  {% endif %}
 </div>
-{% endif %}
+
+<footer class="bg-light text-center text-muted py-3 mt-5 border-top">
+  © 2025 Retail Forecasting System | Built with Flask & Chart.js
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
